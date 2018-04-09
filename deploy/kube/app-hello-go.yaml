@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-go
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hello-go
+    spec:
+      containers:
+      - name: hello-go
+        image: urunimi/hello-go:latest
+        imagePullPolicy: Always
+        env:
+        - name: ENV
+          value: "prod"
+        ports:
+        - name: hello-go-port
+          containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /hello
+            port: hello-go-port
+          initialDelaySeconds: 20
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      restartPolicy: "Always"
