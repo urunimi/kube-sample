@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-proxy-conf
+data:
+  default.conf: |-
+    server_names_hash_bucket_size 512;
+    error_log stderr;
+
+    gzip              on;
+    gzip_buffers      16 8k;
+    gzip_comp_level   4;
+    gzip_min_length   1024;
+    gzip_types        text/plain text/css text/xml text/javascript application/json application/x-javascript application/xml;
+    gzip_vary         on;
+
+    server {
+        listen 80;
+        client_max_body_size 4G;
+        server_name *;
+
+        real_ip_header X-Forwarded-For;
+        set_real_ip_from 0.0.0.0/0;
+
+        location / {
+            proxy_buffer_size 8k;
+            proxy_buffers 8 8k;
+            proxy_http_version 1.1;
+
+            proxy_pass http://hello-go.default.svc.cluster.local;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-proxy
+  labels:
+    app: nginx-proxy
+  annotations:
+    description: "nginx reverse proxy for services and pods powered by annotations"
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy
+    spec:
+      containers:
+        - name: nginx-proxy
+          image: nginx
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: nginx-proxy-config
+              mountPath: /etc/nginx/conf.d/
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      volumes:
+        - name: nginx-proxy-config
+          configMap:
+            name: nginx-proxy-conf
+      restartPolicy: "Always"
+      terminationGracePeriodSeconds: 30
