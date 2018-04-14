@@ -17,9 +17,6 @@ spec:
       - name: hello-go
         image: urunimi/hello-go:latest
         imagePullPolicy: Always
-        env:
-        - name: ENV
-          value: "prod"
         ports:
         - name: hello-go-port
           containerPort: 5000
@@ -27,7 +24,7 @@ spec:
           httpGet:
             path: /hello
             port: hello-go-port
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
           periodSeconds: 30
         resources:
           requests:
