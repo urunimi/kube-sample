@@ -45,7 +45,7 @@ metadata:
   annotations:
     description: "nginx reverse proxy for services and pods powered by annotations"
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 0
