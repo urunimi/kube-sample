@@ -4,9 +4,12 @@ metadata:
   labels:
     app: nginx-proxy
   name: nginx-proxy
-  annotations: 
+  annotations:
+# Certificate for https
 #    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:iam::{{id}}:{{certificate-information}}
 #    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+# Internal load balancer
+#    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
 spec:
   ports:
@@ -14,6 +17,7 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+# Port configuration for https
 #  - name: https
 #    protocol: TCP
 #    port: 443
