@@ -28,6 +28,6 @@ spec:
           periodSeconds: 30
         resources:
           requests:
-            cpu: 100m
-            memory: 200Mi
+            cpu: 200m
+            memory: 400Mi
       restartPolicy: "Always"
