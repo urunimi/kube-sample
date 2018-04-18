@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	Message = "Hello world"
+	Message = "Hello world\n"
 )
 
 func main() {
