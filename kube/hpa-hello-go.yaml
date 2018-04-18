@@ -9,4 +9,4 @@ spec:
     name: hello-go
   minReplicas: 1
   maxReplicas: 8
-  targetCPUUtilizationPercentage: 5
+  targetCPUUtilizationPercentage: 10
