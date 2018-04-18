@@ -8,5 +8,5 @@ spec:
     kind: Deployment
     name: hello-go
   minReplicas: 1
-  maxReplicas: 32
+  maxReplicas: 16
   targetCPUUtilizationPercentage: 5
