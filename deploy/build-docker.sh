@@ -15,10 +15,14 @@ cd $WORKSPACE/hello-go
 
 echo "IMAGE_NAME: $IMAGE_NAME, TAG: $TAG"
 
+echo "--------- Clean up docker images -----------"
+
 docker images prune
 
 IMAGE_COUNT=`docker images | grep $IMAGE_NAME | wc -l`
 [ $IMAGE_COUNT -gt 5 ] && docker rmi -f `docker images | grep $IMAGE_NAME | tail -$(( $IMAGE_COUNT - 5 )) | awk '{split($1,a,"\t"); print $3}'`
+
+echo "--------- Build and push a docker image -----------"
 
 if [[ "$TAG" == "latest" ]] || [[ "$(docker images -q ${IMAGE_NAME}:${TAG} 2> /dev/null)" == "" ]]; then
 	# go test $(go list ./... | grep -v /vendor/)
