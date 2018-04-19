@@ -25,7 +25,7 @@ spec:
             path: /hello
             port: hello-go-port
           initialDelaySeconds: 5
-          periodSeconds: 10
+          periodSeconds: 5
         resources:
           requests:
             cpu: 400m
