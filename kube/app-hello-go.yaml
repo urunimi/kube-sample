@@ -24,8 +24,8 @@ spec:
           httpGet:
             path: /hello
             port: hello-go-port
-          initialDelaySeconds: 10
-          periodSeconds: 30
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
           requests:
             cpu: 400m
